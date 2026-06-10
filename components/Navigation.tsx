@@ -140,10 +140,11 @@ export default function Navigation() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
             transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:hidden glass-dark border-t border-white/[0.07] fixed top-16 left-0 right-0 bottom-0 flex flex-col z-40"
+            className="lg:hidden border-t border-white/[0.07] fixed top-16 left-0 right-0 flex flex-col z-[49] bg-[#0a0a0a]"
+            style={{ height: 'calc(100dvh - 4rem)' }}
           >
             {/* Scrollable nav links */}
-            <div className="flex-1 overflow-y-auto px-6 pt-4">
+            <div className="flex-1 min-h-0 overflow-y-auto px-6 pt-4">
               <ul>
                 {navLinks.map((link, i) => (
                   <motion.li

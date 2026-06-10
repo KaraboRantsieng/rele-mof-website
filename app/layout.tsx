@@ -86,7 +86,7 @@ export default function RootLayout({
       <body className="bg-rmf-black text-white font-inter noise">
         <ScrollProgress />
         <Navigation />
-        <main>{children}</main>
+        <main className="overflow-x-hidden">{children}</main>
         <Footer />
         {/* Floating WhatsApp button */}
         <a
