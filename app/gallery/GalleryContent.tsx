@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback, useRef } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, Facebook, ArrowUpRight } from 'lucide-react'
@@ -88,16 +88,45 @@ const filterTabs = [
 ]
 
 function GalleryImage({ image, onClick, index }: { image: GalleryImage; onClick: () => void; index: number }) {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, amount: 0.1 })
+  const inViewRef = useRef(null)
+  const tiltRef = useRef<HTMLDivElement>(null)
+  const isInView = useInView(inViewRef, { once: true, amount: 0.1 })
   const [hasError, setHasError] = useState(false)
 
+  const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = tiltRef.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    const x = (e.clientX - rect.left) / rect.width - 0.5
+    const y = (e.clientY - rect.top) / rect.height - 0.5
+    el.style.transform = `rotateX(${-y * 8}deg) rotateY(${x * 8}deg) scale(1.04)`
+    el.style.transition = 'transform 0.12s ease-out'
+    el.style.zIndex = '10'
+  }
+
+  const onMouseLeave = () => {
+    if (tiltRef.current) {
+      tiltRef.current.style.transform = 'rotateX(0) rotateY(0) scale(1)'
+      tiltRef.current.style.transition = 'transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)'
+      tiltRef.current.style.zIndex = '1'
+    }
+  }
+
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 20 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay: (index % 6) * 0.06 }}
+    <div style={{ perspective: '800px' }}>
+      <motion.div
+        ref={inViewRef}
+        initial={{ opacity: 0, y: 20 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.5, delay: (index % 6) * 0.06 }}
+      >
+        <div
+          ref={tiltRef}
+          style={{ transformStyle: 'preserve-3d', willChange: 'transform', position: 'relative' }}
+          onMouseMove={onMouseMove}
+          onMouseLeave={onMouseLeave}
+        >
+    <div
       className="relative overflow-hidden cursor-pointer group bg-gray-900"
       onClick={onClick}
       role="button"
@@ -131,7 +160,10 @@ function GalleryImage({ image, onClick, index }: { image: GalleryImage; onClick:
           </div>
         </div>
       )}
-    </motion.div>
+    </div>
+        </div>
+      </motion.div>
+    </div>
   )
 }
 

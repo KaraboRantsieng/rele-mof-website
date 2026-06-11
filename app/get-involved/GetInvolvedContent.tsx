@@ -132,16 +132,26 @@ export default function GetInvolvedContent() {
                 most compelling sports personalities.
               </p>
             </div>
-            <div className="grid lg:grid-cols-3 gap-6">
+            {/* Feature 8 — 3D depth-stacked sponsorship tiers */}
+            <div className="grid lg:grid-cols-3 gap-6" style={{ perspective: '1400px' }}>
               {sponsorTiers.map((tier, i) => {
                 const Icon = tier.icon
+                // Platinum raised most, Silver flat — visible depth hierarchy
+                const zOffset = [28, 14, 0][i]
+                const yOffset = [-6, -3, 0][i]
                 return (
                   <motion.div
                     key={tier.name}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, y: 40, rotateX: -18 }}
+                    whileInView={{ opacity: 1, y: yOffset, rotateX: 0 }}
+                    whileHover={{ y: yOffset - 10, scale: 1.03, boxShadow: '0 28px 60px rgba(0,0,0,0.28), 0 4px 16px rgba(204,0,0,0.18)' }}
                     viewport={{ once: true, amount: 0.2 }}
-                    transition={{ duration: 0.5, delay: i * 0.1 }}
+                    transition={{ duration: 0.55, delay: i * 0.1 }}
+                    style={{
+                      transformPerspective: 800,
+                      translateZ: zOffset,
+                      boxShadow: `0 ${8 + zOffset * 0.4}px ${20 + zOffset}px rgba(0,0,0,0.15)`,
+                    }}
                     className={`${tier.color} ${tier.textColor} border-t-[3px] border-rmf-red p-8`}
                   >
                     <Icon size={32} className="text-rmf-red mb-4" aria-hidden="true" />

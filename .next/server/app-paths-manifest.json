@@ -1,8 +1,0 @@
-{
-  "/programmes/page": "app/programmes/page.js",
-  "/page": "app/page.js",
-  "/events/page": "app/events/page.js",
-  "/get-involved/page": "app/get-involved/page.js",
-  "/gallery/page": "app/gallery/page.js",
-  "/contact/page": "app/contact/page.js"
-}

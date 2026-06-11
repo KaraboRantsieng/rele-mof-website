@@ -3,8 +3,10 @@
 import { useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import { motion, useInView, useScroll, useTransform } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
+const Trophy3D = dynamic(() => import('./3d/Trophy3D'), { ssr: false })
 
 const achievements = [
   { label: 'GQ Sportsperson of the Year', value: '2024' },
@@ -15,15 +17,15 @@ const achievements = [
 
 export default function TheIconSection() {
   const sectionRef = useRef<HTMLElement>(null)
-  const textRef = useRef(null)
-  const isInView = useInView(textRef, { once: true, amount: 0.25 })
+  const textRef    = useRef(null)
+  const isInView   = useInView(textRef, { once: true, amount: 0.25 })
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start end', 'end start'],
   })
   const imageScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.08, 1.0, 1.06])
-  const imageY = useTransform(scrollYProgress, [0, 1], ['-5%', '5%'])
+  const imageY     = useTransform(scrollYProgress, [0, 1], ['-5%', '5%'])
 
   return (
     <section
@@ -31,28 +33,41 @@ export default function TheIconSection() {
       className="relative bg-rmf-black overflow-hidden"
       aria-labelledby="icon-heading"
     >
+      {/* Feature 7 — depth gradient on black section */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
+        <div className="depth-orb1 absolute w-[700px] h-[700px] -top-[200px] -left-[150px] rounded-full"
+             style={{ background: 'radial-gradient(circle, rgba(204,0,0,0.055) 0%, transparent 65%)' }} />
+        <div className="depth-orb2 absolute w-[500px] h-[500px] bottom-[-120px] right-[5%] rounded-full"
+             style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.015) 0%, transparent 65%)' }} />
+      </div>
+
       <div className="grid lg:grid-cols-2 min-h-screen">
 
         {/* LEFT — TEXT COLUMN */}
         <div
           ref={textRef}
-          className="relative z-10 flex flex-col justify-center px-6 lg:px-16 xl:px-24 py-24 lg:py-0"
+          className="relative z-10 flex flex-col justify-center px-6 lg:px-16 xl:px-24 py-24 lg:py-0 overflow-hidden"
         >
-          {/* Giant outline letters behind */}
+          {/* Ghost RELE background text */}
           <div
-            className="absolute top-1/2 -translate-y-1/2 left-0 leading-none select-none pointer-events-none overflow-hidden"
+            className="absolute inset-0 flex items-center justify-center pointer-events-none select-none"
             aria-hidden="true"
           >
             <span
-              className="font-bebas block"
-              style={{
-                fontSize: 'clamp(8rem, 20vw, 22rem)',
-                WebkitTextStroke: '1px rgba(255,255,255,0.04)',
-                color: 'transparent',
-              }}
+              className="font-bebas text-white/[0.04] leading-none"
+              style={{ fontSize: 'clamp(8rem, 22vw, 22rem)' }}
             >
               RELE
             </span>
+          </div>
+
+          {/* Feature 8 — 3D Trophy floating near GQ chip */}
+          <div
+            className="absolute top-[8%] right-0 pointer-events-none hidden lg:block"
+            style={{ width: 110, height: 150, opacity: 0.88 }}
+            aria-hidden="true"
+          >
+            <Trophy3D />
           </div>
 
           <div className="relative z-10">
@@ -69,7 +84,7 @@ export default function TheIconSection() {
               </span>
             </motion.div>
 
-            {/* Name — stroke then fill */}
+            {/* Name */}
             <div className="overflow-hidden mb-1">
               <motion.h2
                 id="icon-heading"
@@ -153,7 +168,7 @@ export default function TheIconSection() {
           </div>
         </div>
 
-        {/* RIGHT — IMAGE COLUMN (full bleed, edge-to-edge) */}
+        {/* RIGHT — IMAGE COLUMN */}
         <div className="relative min-h-[60vw] lg:min-h-0 overflow-hidden">
           <motion.div
             className="absolute inset-0 will-change-transform"
@@ -166,10 +181,8 @@ export default function TheIconSection() {
               className="object-cover object-[center_top]"
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
-            {/* Color grade overlay for editorial feel */}
             <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-rmf-black/40" />
             <div className="absolute inset-0 bg-gradient-to-t from-rmf-black/60 via-transparent to-transparent" />
-            {/* Duotone-lite: red tint in shadows */}
             <div
               className="absolute inset-0 mix-blend-multiply opacity-20"
               style={{ background: 'linear-gradient(135deg, #cc0000 0%, transparent 60%)' }}
@@ -177,7 +190,6 @@ export default function TheIconSection() {
             />
           </motion.div>
 
-          {/* Vertical label on the right edge */}
           <div
             className="absolute top-1/2 right-6 -translate-y-1/2 z-10 select-none"
             aria-hidden="true"

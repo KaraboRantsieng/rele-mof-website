@@ -3,7 +3,11 @@
 import { useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import { motion, useScroll, useTransform } from 'framer-motion'
+
+const HeroParticles = dynamic(() => import('./3d/HeroParticles'), { ssr: false })
+const Football3D    = dynamic(() => import('./3d/Football3D'), { ssr: false })
 
 const LINE1 = 'EMPOWERING'
 const LINE2 = 'SOUTH AFRICA'
@@ -24,7 +28,7 @@ function SplitReveal({ text, delay = 0, className = '' }: {
           animate={{ y: '0%', opacity: 1 }}
           transition={{ duration: 0.72, delay: delay + i * 0.036, ease: [0.22, 1, 0.36, 1] }}
         >
-          {char === ' ' ? ' ' : char}
+          {char === ' ' ? ' ' : char}
         </motion.span>
       ))}
     </span>
@@ -32,17 +36,22 @@ function SplitReveal({ text, delay = 0, className = '' }: {
 }
 
 export default function HeroSection() {
+  const sectionRef = useRef<HTMLElement>(null)
   const imageRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: imageRef, offset: ['start start', 'end start'] })
-  const imageY = useTransform(scrollYProgress, [0, 1], ['0%', '12%'])
+
+  // Scroll progress for parallax + perspective text tilt
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] })
+  const imageY      = useTransform(scrollYProgress, [0, 1], ['0%', '12%'])
+  const headlineTilt = useTransform(scrollYProgress, [0, 0.35], [0, -6])
 
   return (
     <section
+      ref={sectionRef}
       className="relative bg-rmf-black min-h-screen flex flex-col lg:flex-row overflow-hidden"
       aria-label="Hero — Relebohile Mofokeng Foundation"
     >
 
-      {/* ─── RIGHT IMAGE PANEL (order-first on mobile = appears at top) ─── */}
+      {/* ─── RIGHT IMAGE PANEL ─── */}
       <motion.div
         ref={imageRef}
         className="relative w-full mt-16 h-[calc(60vh-4rem)] lg:mt-20 lg:h-[calc(100vh-5rem)] lg:w-[46vw] shrink-0 order-first lg:order-last overflow-hidden"
@@ -62,12 +71,9 @@ export default function HeroSection() {
           />
         </motion.div>
 
-        {/* Fade to black on the left (blends into text panel on desktop) */}
         <div className="hidden lg:block absolute inset-0 bg-gradient-to-r from-rmf-black/70 via-rmf-black/10 to-transparent pointer-events-none" />
-        {/* Fade to black at bottom (mobile) */}
         <div className="lg:hidden absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-rmf-black pointer-events-none" />
 
-        {/* Red accent bar — left edge of image panel (desktop only) */}
         <motion.div
           className="hidden lg:block absolute top-0 left-0 bottom-0 w-[4px] bg-rmf-red z-10"
           initial={{ scaleY: 0 }}
@@ -76,7 +82,6 @@ export default function HeroSection() {
           style={{ transformOrigin: 'top' }}
         />
 
-        {/* Corner label — editorial detail (desktop) */}
         <motion.div
           className="hidden lg:flex absolute bottom-10 right-8 flex-col items-end gap-1"
           initial={{ opacity: 0 }}
@@ -91,7 +96,27 @@ export default function HeroSection() {
       </motion.div>
 
       {/* ─── LEFT TEXT PANEL ─── */}
-      <div className="relative z-10 flex flex-col justify-end lg:justify-center flex-1 px-6 lg:pl-16 xl:pl-24 lg:pr-10 pt-6 pb-16 lg:py-24">
+      <div className="relative z-10 flex flex-col justify-end lg:justify-center flex-1 px-6 lg:pl-16 xl:pl-24 lg:pr-10 pt-6 pb-16 lg:py-24 overflow-hidden">
+
+        {/* Feature 2 — Particle field */}
+        <HeroParticles />
+
+        {/* Feature 1 — 3D Football in background */}
+        <div
+          className="absolute right-[-8%] top-[50%] -translate-y-1/2 pointer-events-none"
+          style={{ width: 'clamp(220px, 38vw, 440px)', height: 'clamp(220px, 38vw, 440px)', opacity: 0.14 }}
+          aria-hidden="true"
+        >
+          <Football3D />
+        </div>
+
+        {/* Depth orbs */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+          <div className="depth-orb1 absolute w-[500px] h-[500px] -top-[150px] -left-[100px] rounded-full"
+               style={{ background: 'radial-gradient(circle, rgba(204,0,0,0.07) 0%, transparent 65%)' }} />
+          <div className="depth-orb2 absolute w-[350px] h-[350px] bottom-[-80px] right-[5%] rounded-full"
+               style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.02) 0%, transparent 65%)' }} />
+        </div>
 
         {/* Animated red vertical rule (desktop only) */}
         <motion.div
@@ -105,7 +130,7 @@ export default function HeroSection() {
 
         {/* NPO BADGE */}
         <motion.div
-          className="flex items-center gap-4 mb-6"
+          className="flex items-center gap-4 mb-6 relative z-10"
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7, delay: 0.5 }}
@@ -116,29 +141,34 @@ export default function HeroSection() {
           </span>
         </motion.div>
 
-        {/* ─── HEADLINE ─── */}
-        <div className="overflow-hidden mb-1">
-          <h1
-            className="font-bebas leading-[0.88] text-white block"
-            style={{ fontSize: 'clamp(4rem, 10vw, 12rem)' }}
-            aria-label={`${LINE1} ${LINE2}`}
-          >
-            <SplitReveal text={LINE1} delay={0.55} />
-          </h1>
-        </div>
-        <div className="overflow-hidden mb-2">
-          <h1
-            className="font-bebas leading-[0.88] block text-white"
-            style={{ fontSize: 'clamp(3.5rem, 9vw, 10.5rem)' }}
-            aria-hidden="true"
-          >
-            <SplitReveal text={LINE2} delay={0.85} />
-          </h1>
-        </div>
+        {/* Feature 3 — 3D Perspective text (scroll-driven tilt) */}
+        <motion.div
+          className="relative z-10"
+          style={{ transformPerspective: 700, rotateX: headlineTilt }}
+        >
+          <div className="overflow-hidden mb-1">
+            <h1
+              className="font-bebas leading-[0.88] text-white block"
+              style={{ fontSize: 'clamp(4rem, 10vw, 12rem)' }}
+              aria-label={`${LINE1} ${LINE2}`}
+            >
+              <SplitReveal text={LINE1} delay={0.55} />
+            </h1>
+          </div>
+          <div className="overflow-hidden mb-2">
+            <h1
+              className="font-bebas leading-[0.88] block text-white"
+              style={{ fontSize: 'clamp(3.5rem, 9vw, 10.5rem)' }}
+              aria-hidden="true"
+            >
+              <SplitReveal text={LINE2} delay={0.85} />
+            </h1>
+          </div>
+        </motion.div>
 
         {/* Animated red rule */}
         <motion.div
-          className="h-[3px] bg-rmf-red origin-left mt-4 mb-10"
+          className="h-[3px] bg-rmf-red origin-left mt-4 mb-10 relative z-10"
           style={{ maxWidth: 'clamp(160px, 30vw, 440px)' }}
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
@@ -147,7 +177,7 @@ export default function HeroSection() {
 
         {/* TAGLINE + CTAs */}
         <motion.div
-          className="flex flex-col lg:flex-row lg:items-end gap-8 lg:gap-14"
+          className="flex flex-col lg:flex-row lg:items-end gap-8 lg:gap-14 relative z-10"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.6 }}

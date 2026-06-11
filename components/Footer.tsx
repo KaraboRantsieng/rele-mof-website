@@ -32,7 +32,10 @@ export default function Footer() {
     <footer className="relative bg-rmf-black border-t border-white/10 overflow-hidden" aria-label="Site Footer">
       {/* Animated background */}
       <div className="footer-bg" aria-hidden="true" />
-      <div className="footer-grid" aria-hidden="true" />
+      {/* Feature 2 — 3D perspective grid floor (replaces flat grid) */}
+      <div className="footer-grid-3d-wrap" aria-hidden="true">
+        <div className="footer-grid-3d-inner" />
+      </div>
 
       {/* Red divider */}
       <div className="h-1 bg-rmf-red relative z-10" />
@@ -42,7 +45,8 @@ export default function Footer() {
 
           {/* Brand */}
           <div className="lg:col-span-1 flex flex-col items-center text-center">
-            <Link href="/" className="inline-block mb-6">
+            {/* Feature 1 — 3D floating logo */}
+            <Link href="/" className="inline-block mb-6 float-anim">
               <Image
                 src="/images/logo.jpeg"
                 alt="Relebohile Mofokeng Foundation"

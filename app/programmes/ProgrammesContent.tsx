@@ -1,9 +1,71 @@
 'use client'
 
-import { useRef } from 'react'
+import React, { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { BookOpen, Heart, Dumbbell, Check, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
+
+const pillars = [
+  { label: 'Education\n& Culture', height: 100, delay: 0.1 },
+  { label: 'CSI\n& Charity', height: 130, delay: 0.22 },
+  { label: 'Sports\nDevelopment', height: 160, delay: 0.34 },
+]
+
+function Pillar3D({ label, height, delay }: { label: string; height: number; delay: number }) {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, amount: 0.5 })
+  const tiltRef = useRef<HTMLDivElement>(null)
+
+  const onEnter = () => {
+    if (tiltRef.current) {
+      tiltRef.current.style.transform = 'translateY(-10px) scale(1.06)'
+      tiltRef.current.style.boxShadow = '4px 4px 0 rgba(0,0,0,0.25), 0 16px 40px rgba(204,0,0,0.3)'
+      tiltRef.current.style.transition = 'all 0.35s cubic-bezier(0.22, 1, 0.36, 1)'
+    }
+  }
+  const onLeave = () => {
+    if (tiltRef.current) {
+      tiltRef.current.style.transform = 'translateY(0) scale(1)'
+      tiltRef.current.style.boxShadow = '4px 4px 0 rgba(0,0,0,0.2), 0 8px 24px rgba(204,0,0,0.15)'
+      tiltRef.current.style.transition = 'all 0.5s cubic-bezier(0.22, 1, 0.36, 1)'
+    }
+  }
+
+  return (
+    <div ref={ref} className="flex flex-col items-center gap-3" style={{ perspective: '400px' }}>
+      <motion.div
+        ref={tiltRef as React.RefObject<HTMLDivElement>}
+        className="w-14 lg:w-16 bg-rmf-red relative cursor-default"
+        initial={{ scaleY: 0, rotateX: -25, opacity: 0 }}
+        animate={isInView ? { scaleY: 1, rotateX: 0, opacity: 1 } : {}}
+        transition={{ duration: 0.9, delay, ease: [0.22, 1, 0.36, 1] }}
+        style={{
+          height,
+          transformOrigin: 'bottom',
+          transformStyle: 'preserve-3d',
+          boxShadow: '4px 4px 0 rgba(0,0,0,0.2), 0 8px 24px rgba(204,0,0,0.15)',
+        }}
+        onMouseEnter={onEnter}
+        onMouseLeave={onLeave}
+      >
+        {/* Right face for 3D depth */}
+        <div
+          className="absolute top-0 right-[-8px] bottom-0 w-2"
+          style={{ background: 'rgba(0,0,0,0.28)', transform: 'skewY(0deg)' }}
+          aria-hidden="true"
+        />
+      </motion.div>
+      <motion.p
+        className="font-barlow font-semibold uppercase tracking-[2px] text-rmf-black text-[10px] text-center whitespace-pre-line leading-tight max-w-[70px]"
+        initial={{ opacity: 0 }}
+        animate={isInView ? { opacity: 1 } : {}}
+        transition={{ duration: 0.5, delay: delay + 0.4 }}
+      >
+        {label}
+      </motion.p>
+    </div>
+  )
+}
 
 function AnimatedSection({ children, className }: { children: React.ReactNode; className?: string }) {
   const ref = useRef(null)
@@ -28,11 +90,17 @@ export default function ProgrammesContent() {
       <section className="bg-white py-16 lg:py-20">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
           <AnimatedSection>
-            <p className="font-inter text-gray-700 text-lg leading-relaxed max-w-3xl mx-auto text-center">
+            <p className="font-inter text-gray-700 text-lg leading-relaxed max-w-3xl mx-auto text-center mb-14">
               The Foundation operates across three integrated programme pillars — each designed to
               address a critical dimension of youth development in South African communities.
               Together, they form a holistic ecosystem of opportunity.
             </p>
+            {/* Feature 5 — 3D rising pillar columns */}
+            <div className="flex justify-center items-end gap-8 lg:gap-14" aria-hidden="true">
+              {pillars.map((p) => (
+                <Pillar3D key={p.label} {...p} />
+              ))}
+            </div>
           </AnimatedSection>
         </div>
       </section>

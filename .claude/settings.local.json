@@ -40,7 +40,16 @@
       "WebFetch(domain:design.dev)",
       "WebFetch(domain:www.swishy.ai)",
       "Bash(python skills/ui-ux-pro-max/scripts/search.py \"nonprofit foundation social media links dark premium minimal\" --design-system)",
-      "Bash(python .claude/skills/ui-ux-pro-max/scripts/search.py \"nonprofit foundation social media links dark premium minimal\" --design-system)"
+      "Bash(python .claude/skills/ui-ux-pro-max/scripts/search.py \"nonprofit foundation social media links dark premium minimal\" --design-system)",
+      "PowerShell(npm show next versions --json 2>$null | ConvertFrom-Json | Where-Object { $_ -match '^15\\\\.3\\\\.' } | Select-Object -Last 10)",
+      "PowerShell(npm show next dist-tags --json 2>$null)",
+      "WebFetch(domain:app.superdesign.dev)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(git clone *)",
+      "Bash(claude mcp *)",
+      "Bash(uv --version)"
     ]
   }
 }

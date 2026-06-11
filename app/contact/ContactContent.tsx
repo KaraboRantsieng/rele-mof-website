@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Mail, MapPin, Phone, Facebook, Check, AlertCircle } from 'lucide-react'
+import SaMapBackground from '@/components/3d/SaMapBackground'
 
 function TikTokIcon({ size = 20 }: { size?: number }) {
   return (
@@ -132,6 +133,14 @@ export default function ContactContent() {
               </div>
             </div>
 
+            {/* Feature 10 — 3D SA map pin drop */}
+            <div className="mt-10">
+              <p className="font-barlow font-semibold uppercase tracking-[3px] text-white/30 text-[10px] mb-3">
+                Our Location
+              </p>
+              <SaMapBackground className="w-full max-w-[320px] opacity-90" />
+            </div>
+
             {/* WhatsApp — editorial minimal, brand-consistent */}
             <div className="mt-10 relative group">
               <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-rmf-red" />
@@ -185,20 +194,6 @@ export default function ContactContent() {
               </div>
             </div>
 
-            {/* Google Maps embed */}
-            <div className="mt-10 border-l-[3px] border-rmf-red overflow-hidden" style={{ aspectRatio: '4/3' }}>
-              <iframe
-                src="https://maps.google.com/maps?q=Sharpeville,+Gauteng,+South+Africa&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                width="100%"
-                height="100%"
-                style={{ border: 0, filter: 'grayscale(100%) invert(92%) contrast(83%)' }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Sharpeville, Gauteng — Relebohile Mofokeng Foundation"
-                aria-label="Map showing Sharpeville, Gauteng, South Africa"
-              />
-            </div>
           </motion.div>
 
           {/* Right — Form */}

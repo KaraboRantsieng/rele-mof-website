@@ -2,9 +2,49 @@
 
 import { useRef, useState } from 'react'
 import Image from 'next/image'
+import dynamic from 'next/dynamic'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { Calendar, MapPin, Users, Trophy, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
+
+const Countdown3D = dynamic(() => import('@/components/3d/Countdown3D'), { ssr: false })
+
+// 3D flip card for the 2026 upcoming event cards
+function FlipCard3D({ front, back }: { front: React.ReactNode; back: React.ReactNode }) {
+  const [flipped, setFlipped] = useState(false)
+  return (
+    <div
+      style={{ perspective: '1200px', minHeight: '360px' }}
+      onMouseEnter={() => setFlipped(true)}
+      onMouseLeave={() => setFlipped(false)}
+      className="relative cursor-pointer"
+    >
+      <motion.div
+        animate={{ rotateY: flipped ? 180 : 0 }}
+        transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+        style={{ transformStyle: 'preserve-3d', position: 'relative', minHeight: 360 }}
+        className="w-full"
+      >
+        {/* Front face */}
+        <div style={{ backfaceVisibility: 'hidden', position: 'absolute', inset: 0 }} className="w-full">
+          {front}
+        </div>
+        {/* Back face */}
+        <div
+          style={{
+            backfaceVisibility: 'hidden',
+            transform: 'rotateY(180deg)',
+            position: 'absolute',
+            inset: 0,
+          }}
+          className="w-full"
+        >
+          {back}
+        </div>
+      </motion.div>
+    </div>
+  )
+}
 
 const filterTabs = ['All', '2025 Events', '2026 Upcoming', 'Tournaments', 'Launch Events']
 
@@ -229,52 +269,69 @@ export default function EventsContent() {
         <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
           <AnimatedSection>
             <p className="font-barlow font-semibold uppercase text-rmf-red tracking-[4px] text-sm mb-4">Coming Soon</p>
-            <h2 className="font-bebas text-rmf-black text-[clamp(2.5rem,6vw,5rem)] leading-none mb-12">
+            <h2 className="font-bebas text-rmf-black text-[clamp(2.5rem,6vw,5rem)] leading-none mb-6">
               2026 Upcoming Events
             </h2>
-            <div className="grid lg:grid-cols-2 gap-8">
-              {/* 2nd Annual Soccer Tournament 2026 */}
-              <div className="bg-white border-t-[3px] border-rmf-red p-8">
-                <span className="font-barlow font-semibold uppercase tracking-[3px] text-xs text-rmf-red block mb-3">
-                  Coming 2026
-                </span>
-                <h3 className="font-bebas text-rmf-black text-3xl lg:text-4xl mb-4">2nd Annual Soccer Tournament</h3>
-                <div className="flex flex-wrap gap-4 text-gray-500 text-sm font-inter mb-4">
-                  <span className="flex items-center gap-1"><Calendar size={12} aria-hidden="true" /> February 2026</span>
-                  <span className="flex items-center gap-1"><MapPin size={12} aria-hidden="true" /> Sharpeville, Gauteng</span>
-                </div>
-                <p className="font-inter text-gray-600 text-sm leading-relaxed mb-6">
-                  Bigger, better, and broader. The 2026 tournament will expand to include more age groups, new venues, and enhanced prize pools.
-                </p>
-                {/* Official Poster */}
-                <div className="relative aspect-[3/4] sm:aspect-[2/3] overflow-hidden border border-gray-200">
-                  <Image
-                    src="/images/gallery/tornament-poster.jpeg"
-                    alt="2nd Annual Soccer Tournament 2026 — Official Poster"
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 bg-rmf-red text-white text-center py-2">
-                    <span className="font-barlow font-semibold uppercase tracking-[2px] text-xs">Official Poster</span>
-                  </div>
-                </div>
-              </div>
 
-              {/* Foundation Gala Dinner 2026 */}
-              <div className="bg-white border-t-[3px] border-rmf-red p-8">
-                <span className="font-barlow font-semibold uppercase tracking-[3px] text-xs text-rmf-red block mb-3">
-                  Coming 2026
-                </span>
-                <h3 className="font-bebas text-rmf-black text-3xl lg:text-4xl mb-4">Foundation Gala Dinner 2026</h3>
-                <div className="flex flex-wrap gap-4 text-gray-500 text-sm font-inter mb-4">
-                  <span className="flex items-center gap-1"><Calendar size={12} aria-hidden="true" /> To Be Announced</span>
-                  <span className="flex items-center gap-1"><MapPin size={12} aria-hidden="true" /> To Be Announced</span>
-                </div>
-                <p className="font-inter text-gray-600 text-sm leading-relaxed">
-                  Details for the 2026 Foundation Gala Dinner are still to be announced. Stay tuned for updates on date, venue, and ticket information.
-                </p>
-              </div>
+            {/* Feature 6 — 3D Flip Countdown to Feb 2026 */}
+            <div className="mb-12">
+              <p className="font-barlow font-semibold uppercase tracking-[3px] text-rmf-muted text-[10px] mb-4">
+                Countdown to 2nd Annual Soccer Tournament
+              </p>
+              <Countdown3D />
+            </div>
+
+            {/* 3D Flip Card */}
+            <div className="max-w-2xl">
+              <FlipCard3D
+                front={
+                  <div className="bg-white border-t-[3px] border-rmf-red p-8 h-full">
+                    <span className="font-barlow font-semibold uppercase tracking-[3px] text-xs text-rmf-red block mb-3">
+                      Coming 2026
+                    </span>
+                    <h3 className="font-bebas text-rmf-black text-3xl lg:text-4xl mb-4">2nd Annual Soccer Tournament</h3>
+                    <div className="flex flex-wrap gap-4 text-gray-500 text-sm font-inter mb-4">
+                      <span className="flex items-center gap-1"><Calendar size={12} aria-hidden="true" /> 27 Jun – 19 Jul 2026</span>
+                      <span className="flex items-center gap-1"><MapPin size={12} aria-hidden="true" /> Sharpeville, Gauteng</span>
+                    </div>
+                    <p className="font-inter text-gray-600 text-sm leading-relaxed mb-4">
+                      Bigger, better, and broader. Hover to see how to register.
+                    </p>
+                    <div className="relative aspect-[2/1] overflow-hidden border border-gray-200">
+                      <Image
+                        src="/images/gallery/tornament-poster.jpeg"
+                        alt="2nd Annual Soccer Tournament 2026 — Official Poster"
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                      />
+                    </div>
+                  </div>
+                }
+                back={
+                  <div className="bg-rmf-black border-t-[3px] border-rmf-red p-8 h-full flex flex-col justify-center">
+                    <span className="font-barlow font-semibold uppercase tracking-[3px] text-xs text-rmf-red block mb-4">
+                      Register Your Team
+                    </span>
+                    <h3 className="font-bebas text-white text-3xl lg:text-4xl mb-6">How To Participate</h3>
+                    <ul className="space-y-3 mb-8">
+                      {['Open to all age groups (U-12 to Senior)', 'Teams of 11 + substitutes', 'Location: Sharpeville, Gauteng', 'Date: 27 Jun – 19 Jul 2026'].map(item => (
+                        <li key={item} className="flex items-start gap-3">
+                          <span className="w-[3px] h-4 bg-rmf-red shrink-0 mt-0.5" />
+                          <span className="font-inter text-rmf-muted text-sm">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <a
+                      href="https://wa.me/27661349395?text=Hi%2C%20I%27d%20like%20to%20register%20for%20the%202026%20Soccer%20Tournament."
+                      target="_blank" rel="noopener noreferrer"
+                      className="font-barlow font-semibold uppercase tracking-[3px] text-sm bg-rmf-red text-white px-6 py-3 text-center hover:bg-white hover:text-rmf-black transition-all duration-300 cursor-pointer"
+                    >
+                      Register via WhatsApp
+                    </a>
+                  </div>
+                }
+              />
             </div>
           </AnimatedSection>
         </div>

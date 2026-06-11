@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import React, { useRef } from 'react'
 import Image from 'next/image'
 import { motion, useInView } from 'framer-motion'
 import { Target, Users, BookOpen, Heart, Shield, Globe } from 'lucide-react'
@@ -152,36 +152,90 @@ export default function AboutContent() {
 }
 
 function AimCard({ aim, Icon, index }: { aim: typeof aims[0]; Icon: typeof Target; index: number }) {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, amount: 0.3 })
+  const inViewRef = useRef(null)
+  const tiltRef = useRef<HTMLDivElement>(null)
+  const isInView = useInView(inViewRef, { once: true, amount: 0.3 })
+
+  const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = tiltRef.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    const x = (e.clientX - rect.left) / rect.width - 0.5
+    const y = (e.clientY - rect.top) / rect.height - 0.5
+    el.style.transform = `rotateX(${-y * 10}deg) rotateY(${x * 10}deg) scale(1.02)`
+    el.style.transition = 'transform 0.12s ease-out'
+  }
+
+  const onMouseLeave = () => {
+    if (tiltRef.current) {
+      tiltRef.current.style.transform = 'rotateX(0) rotateY(0) scale(1)'
+      tiltRef.current.style.transition = 'transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)'
+    }
+  }
+
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 30 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, delay: index * 0.1, ease: 'easeOut' }}
-      className="border-l-[3px] border-rmf-red bg-white/5 p-7"
-    >
-      <Icon size={28} className="text-rmf-red mb-4" aria-hidden="true" />
-      <h3 className="font-barlow font-semibold uppercase tracking-[2px] text-white text-lg mb-3">{aim.title}</h3>
-      <p className="font-inter text-rmf-muted text-sm leading-relaxed">{aim.desc}</p>
-    </motion.div>
+    <div ref={inViewRef} style={{ perspective: '1000px' }}>
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.6, delay: index * 0.1, ease: 'easeOut' }}
+      >
+        <div
+          ref={tiltRef}
+          style={{ transformStyle: 'preserve-3d', willChange: 'transform' }}
+          onMouseMove={onMouseMove}
+          onMouseLeave={onMouseLeave}
+        >
+          <div className="border-l-[3px] border-rmf-red bg-white/5 p-7 group hover:bg-white/[0.08] transition-colors duration-300">
+            <Icon size={28} className="text-rmf-red mb-4" aria-hidden="true" />
+            <h3 className="font-barlow font-semibold uppercase tracking-[2px] text-white text-lg mb-3">{aim.title}</h3>
+            <p className="font-inter text-rmf-muted text-sm leading-relaxed">{aim.desc}</p>
+          </div>
+        </div>
+      </motion.div>
+    </div>
   )
 }
 
 function OrgCard({ item, index }: { item: typeof orgStructure[0]; index: number }) {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, amount: 0.3 })
+  const inViewRef = useRef(null)
+  const liftRef = useRef<HTMLDivElement>(null)
+  const isInView = useInView(inViewRef, { once: true, amount: 0.3 })
+
+  const onEnter = () => {
+    if (liftRef.current) {
+      liftRef.current.style.transform = 'translateY(-8px) scale(1.03)'
+      liftRef.current.style.boxShadow = '0 20px 40px rgba(0,0,0,0.18), 0 4px 12px rgba(204,0,0,0.15)'
+      liftRef.current.style.transition = 'transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease'
+    }
+  }
+  const onLeave = () => {
+    if (liftRef.current) {
+      liftRef.current.style.transform = 'translateY(0px) scale(1)'
+      liftRef.current.style.boxShadow = '0 4px 12px rgba(0,0,0,0.06)'
+      liftRef.current.style.transition = 'transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s ease'
+    }
+  }
+
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={isInView ? { opacity: 1, scale: 1 } : {}}
-      transition={{ duration: 0.5, delay: index * 0.08, ease: 'easeOut' }}
-      className="bg-white border-t-[3px] border-rmf-red px-8 py-6 text-center min-w-[200px]"
-    >
-      <p className="font-bebas text-rmf-black text-xl leading-tight">{item.name}</p>
-      <p className="font-barlow font-semibold uppercase tracking-[1px] text-rmf-red text-xs mt-2">{item.role}</p>
-    </motion.div>
+    <div ref={inViewRef}>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={isInView ? { opacity: 1, scale: 1 } : {}}
+        transition={{ duration: 0.5, delay: index * 0.08, ease: 'easeOut' }}
+        style={{ perspective: '600px' }}
+      >
+        <div
+          ref={liftRef}
+          style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.06)', willChange: 'transform' }}
+          className="bg-white border-t-[3px] border-rmf-red px-8 py-6 text-center min-w-[200px] cursor-default"
+          onMouseEnter={onEnter}
+          onMouseLeave={onLeave}
+        >
+          <p className="font-bebas text-rmf-black text-xl leading-tight">{item.name}</p>
+          <p className="font-barlow font-semibold uppercase tracking-[1px] text-rmf-red text-xs mt-2">{item.role}</p>
+        </div>
+      </motion.div>
+    </div>
   )
 }
