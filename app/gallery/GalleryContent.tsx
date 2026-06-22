@@ -254,12 +254,12 @@ export default function GalleryContent() {
             2nd Annual Soccer Tournament — Official Poster
           </h2>
           <div className="max-w-sm">
-            <div className="relative aspect-[2/3] overflow-hidden border-l-[3px] border-rmf-red">
+            <div className="relative aspect-[3/4] overflow-hidden border-l-[3px] border-rmf-red bg-black">
               <Image
                 src="/images/gallery/tornament-poster.jpeg"
                 alt="2nd Annual Soccer Tournament 2026 — Official Poster"
                 fill
-                className="object-cover"
+                className="object-contain object-center"
                 sizes="(max-width: 640px) 100vw, 400px"
               />
             </div>

@@ -297,12 +297,12 @@ export default function EventsContent() {
                     <p className="font-inter text-gray-600 text-sm leading-relaxed mb-4">
                       Bigger, better, and broader. Hover to see how to register.
                     </p>
-                    <div className="relative aspect-[3/4] overflow-hidden border border-gray-200 bg-black flex items-center justify-center">
+                    <div className="relative aspect-[2/1] overflow-hidden border border-gray-200">
                       <Image
                         src="/images/gallery/tornament-poster.jpeg"
                         alt="2nd Annual Soccer Tournament 2026 — Official Poster"
                         fill
-                        className="object-contain object-center"
+                        className="object-cover"
                         sizes="(max-width: 1024px) 100vw, 50vw"
                       />
                     </div>
