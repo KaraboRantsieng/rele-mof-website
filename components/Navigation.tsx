@@ -28,6 +28,7 @@ const navLinks = [
   { href: '/about', label: 'About' },
   { href: '/programmes', label: 'Programmes' },
   { href: '/events', label: 'Events' },
+  { href: '/articles', label: 'Articles' },
   { href: '/get-involved', label: 'Get Involved' },
   { href: '/gallery', label: 'Gallery' },
   { href: '/contact', label: 'Contact' },
