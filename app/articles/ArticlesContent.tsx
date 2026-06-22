@@ -99,16 +99,14 @@ export default function ArticlesContent() {
               </div>
 
               {/* Image */}
-              <div className="relative w-full lg:w-[340px] h-[280px] lg:h-auto shrink-0 overflow-hidden">
+              <div className="relative w-full lg:w-[380px] h-[300px] lg:h-auto shrink-0 overflow-hidden bg-[#111]">
                 <Image
                   src={featuredArticle.image}
                   alt="Relebohile Mofokeng in Orlando Pirates kit"
                   fill
-                  className="object-cover object-top group-hover:scale-105 transition-transform duration-700"
-                  sizes="(max-width: 1024px) 100vw, 340px"
+                  className="object-contain group-hover:scale-105 transition-transform duration-700"
+                  sizes="(max-width: 1024px) 100vw, 380px"
                 />
-                {/* subtle dark gradient on left edge to blend into card */}
-                <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-[#0a0a0a]/60 to-transparent lg:block hidden" aria-hidden="true" />
               </div>
             </div>
           </a>
