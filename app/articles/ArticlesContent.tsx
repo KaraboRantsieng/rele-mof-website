@@ -129,15 +129,14 @@ export default function ArticlesContent() {
                   aria-label={`Read full article: ${article.title} on ${article.source}`}
                 >
                   {/* Thumbnail */}
-                  <div className="relative w-full sm:w-[200px] h-[180px] sm:h-auto shrink-0 overflow-hidden">
+                  <div className="relative w-full sm:w-[200px] h-[220px] sm:h-auto shrink-0 overflow-hidden bg-black">
                     <Image
                       src={article.image}
                       alt={article.title}
                       fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                      className="object-contain group-hover:scale-105 transition-transform duration-700"
                       sizes="(max-width: 640px) 100vw, 200px"
                     />
-                    <div className="absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-[#111]/60 to-transparent sm:block hidden" aria-hidden="true" />
                   </div>
 
                   {/* Content */}
