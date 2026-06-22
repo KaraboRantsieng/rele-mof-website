@@ -302,7 +302,7 @@ export default function EventsContent() {
                         src="/images/gallery/tornament-poster.jpeg"
                         alt="2nd Annual Soccer Tournament 2026 — Official Poster"
                         fill
-                        className="object-cover object-top"
+                        className="object-cover object-center"
                         sizes="(max-width: 1024px) 100vw, 50vw"
                       />
                     </div>
