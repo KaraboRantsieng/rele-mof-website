@@ -282,7 +282,7 @@ export default function EventsContent() {
             </div>
 
             {/* 3D Flip Card */}
-            <div className="max-w-2xl">
+            <div className="max-w-2xl mx-auto">
               <FlipCard3D
                 front={
                   <div className="bg-white border-t-[3px] border-rmf-red p-8 h-full">
