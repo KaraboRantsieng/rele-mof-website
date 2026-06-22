@@ -274,7 +274,7 @@ export default function EventsContent() {
             </h2>
 
             {/* Feature 6 — 3D Flip Countdown to Feb 2026 */}
-            <div className="mb-12">
+            <div className="mb-12 flex flex-col items-center text-center">
               <p className="font-barlow font-semibold uppercase tracking-[3px] text-rmf-muted text-[10px] mb-4">
                 Countdown to 2nd Annual Soccer Tournament
               </p>
@@ -297,12 +297,12 @@ export default function EventsContent() {
                     <p className="font-inter text-gray-600 text-sm leading-relaxed mb-4">
                       Bigger, better, and broader. Hover to see how to register.
                     </p>
-                    <div className="relative aspect-[2/1] overflow-hidden border border-gray-200">
+                    <div className="relative h-28 overflow-hidden border border-gray-200">
                       <Image
                         src="/images/gallery/tornament-poster.jpeg"
                         alt="2nd Annual Soccer Tournament 2026 — Official Poster"
                         fill
-                        className="object-cover"
+                        className="object-cover object-top"
                         sizes="(max-width: 1024px) 100vw, 50vw"
                       />
                     </div>
