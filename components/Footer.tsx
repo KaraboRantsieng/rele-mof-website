@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Facebook } from 'lucide-react'
+import { Facebook, Instagram } from 'lucide-react'
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -69,6 +69,15 @@ export default function Footer() {
                 className="text-rmf-muted hover:text-rmf-red transition-colors duration-200 cursor-pointer"
               >
                 <Facebook size={20} aria-hidden="true" />
+              </a>
+              <a
+                href="https://www.instagram.com/relebohilemofokengfoundation"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="text-rmf-muted hover:text-rmf-red transition-colors duration-200 cursor-pointer"
+              >
+                <Instagram size={20} aria-hidden="true" />
               </a>
               <a
                 href="https://www.tiktok.com/@rele_mofokeng_foundation?_r=1&_t=ZS-96zHRCm0zUS"
